@@ -73,8 +73,14 @@ haa_data <- haa_pre %>%
   mutate(haa_pct_quart = ntile(haa_pct,4)) %>% 
   dplyr::select(sid,haa_pct,haa_pct_quart)
 
+## import and clean muc5b data ##
+muc5b_pre <- read_excel("data/raw_data/copdgene_muc5b_2017_06_01.xlsx")
+muc5b_pre2 <- clean_names(muc5b_pre)
+muc5b_data <- muc5b_pre2 %>% dplyr::select(sid,muc5)
+
 ## merge parenchyma, clinical and mortality datasets ##
 clin_mort <- left_join(mortality,clinical)
 clin_mort_visual <- inner_join(visual,clin_mort)
 clin_mort_visual_haa <- inner_join(clin_mort_visual,haa_data)
-final_data <- left_join(parenchyma,clin_mort_visual_haa) %>% drop_na(ila_visual,haa_pct)
+clin_mort_visual_haa_muc5 <- inner_join(clin_mort_visual_haa,muc5b_data)
+final_data <- left_join(parenchyma,clin_mort_visual_haa_muc5) %>% drop_na(ila_visual,haa_pct)
