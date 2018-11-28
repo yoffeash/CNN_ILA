@@ -39,6 +39,5 @@ bland_alt <- blandr.draw(final_data$pct_ild_cnn,final_data$pct_ild_lh,"CNN","Loc
             "Bland-Altman: Method 1 = CNN, Method 2 = LH",
             plotProportionalBias = TRUE)
 
-
 ### plot correlation plots and Bland Altman Plots ###
 plot_grid(corr_plot,corr_log_plot,bland_alt,ncol=2)

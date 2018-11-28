@@ -65,7 +65,16 @@ visual <- visual %>%
   mutate(ila_d_01_23=ifelse(ila_visual<2,0,1)) %>% 
   mutate(ila_d_0_123=ifelse(ila_visual<1,0,1))
 
+## import and clean HAA data ##
+haa_data <- read_csv("data/raw_data/COPDGeneHAAPhenos.csv")
+haa_pre <- clean_names(haa_data)
+haa_data <- haa_pre %>% 
+  mutate(haa_pct = (whole_lung_wild_card_haa600-whole_lung_wild_card_haa250)*100) %>% 
+  mutate(haa_pct_quart = ntile(haa_pct,4)) %>% 
+  dplyr::select(sid,haa_pct,haa_pct_quart)
+
 ## merge parenchyma, clinical and mortality datasets ##
 clin_mort <- left_join(mortality,clinical)
 clin_mort_visual <- inner_join(visual,clin_mort)
-final_data <- left_join(parenchyma,clin_mort_visual) %>% drop_na(ila_visual)
+clin_mort_visual_haa <- inner_join(clin_mort_visual,haa_data)
+final_data <- left_join(parenchyma,clin_mort_visual_haa) %>% drop_na(ila_visual,haa_pct)
