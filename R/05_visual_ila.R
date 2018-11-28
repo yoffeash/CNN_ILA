@@ -27,4 +27,3 @@ plot(perf, col=rainbow(7), main="Visual ILA based on CNN Predictor", xlab="Speci
 abline(0, 1)
 text(x=0.7,y=0.4,"Area Under the Curve =")
 text(x=0.7,y=0.35,auc)
-
