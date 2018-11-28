@@ -34,10 +34,11 @@ corr_log_plot <- ggplot(final_data, aes(x=log(pct_ild_lh), y=log(pct_ild_cnn))) 
   xlim(-0.5,5) +
   ylim(-0.5,5)
 
-plot_grid(corr_plot,corr_log_plot)
-
 ## Bland Altman ##
-blandr.draw(final_data$pct_ild_cnn,final_data$pct_ild_lh,"CNN","Local Histogram",
-            "Bland Altman: CNN and LH Methods for Interstitial Features",
+bland_alt <- blandr.draw(final_data$pct_ild_cnn,final_data$pct_ild_lh,"CNN","Local Histogram",
+            "Bland-Altman: Method 1 = CNN, Method 2 = LH",
             plotProportionalBias = TRUE)
 
+
+### plot correlation plots and Bland Altman Plots ###
+plot_grid(corr_plot,corr_log_plot,bland_alt,ncol=2)
