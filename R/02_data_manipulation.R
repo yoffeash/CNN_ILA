@@ -34,11 +34,20 @@ parenchyma_cnn <- parenchyma_cnn %>% mutate(total_volume = # caculate parenchyma
                           Nodular +
                           Reticular +
                           SubpleuralLine)/total_volume)*100) %>% 
-  mutate(pct_emph_cnn = ((PanlobularEmphysema +
+  mutate(pct_emph_cnn = ((PanlobularEmphysema + 
                             CentrilobularEmphysema)/total_volume)*100) %>% 
   mutate(pct_norm_cnn = ((NormalParenchyma/total_volume)*100)) %>% 
+  mutate(pct_panlobular_cnn = (PanlobularEmphysema/total_volume)*100) %>% 
+  mutate(pct_centri_emph_cnn = (CentrilobularEmphysema/total_volume)*100) %>% 
+  mutate(pct_centri_nod_cnn = (CentrilobularNodule/total_volume)*100) %>% 
+  mutate(pct_groundglass_cnn = (GroundGlass/total_volume)*100) %>% 
+  mutate(pct_honeycombing_cnn = (Honeycombing/total_volume)*100) %>% 
+  mutate(pct_linearscar_cnn = (LinearScar/total_volume)*100) %>% 
+  mutate(pct_reticular_cnn = (Reticular/total_volume)*100) %>% 
+  mutate(pct_subpleuralline_cnn = (SubpleuralLine/total_volume)*100) %>%
   rename(sid=SID) %>% 
-  dplyr::select(sid,pct_ild_cnn,pct_emph_cnn,pct_norm_cnn)
+  dplyr::select(sid,pct_ild_cnn,pct_emph_cnn,pct_norm_cnn,
+                pct_panlobular_cnn,pct_centri_emph_cnn,pct_centri_nod_cnn,pct_groundglass_cnn,pct_honeycombing_cnn,pct_linearscar_cnn,pct_reticular_cnn,pct_subpleuralline_cnn)
 
 ## merge parenchyma datasets and create cut offs ##
 parenchyma <- inner_join(parenchyma_cnn,parenchyma_lh) %>% drop_na()
@@ -53,7 +62,8 @@ parenchyma <- parenchyma %>%
 ## import and clean clinical dataset ##
 clinical_pre <- read_delim("data/raw_data/COPDGene_P1P2_All_Visit_09OCT17.txt","\t", escape_double = FALSE, trim_ws = TRUE)
 clinical <- clinical_pre %>% 
-  filter(visitnum==1)
+  filter(visitnum==1) %>% 
+  filter(finalGold != -2)
 
 ## import and clean mortality dataset ##
 mortality <- read_delim("data/raw_data/COPDGene_Mort_COD_Adjud_oct18.txt","\t", escape_double = FALSE, trim_ws = TRUE) 
@@ -83,4 +93,4 @@ clin_mort <- left_join(mortality,clinical)
 clin_mort_visual <- inner_join(visual,clin_mort)
 clin_mort_visual_haa <- inner_join(clin_mort_visual,haa_data)
 clin_mort_visual_haa_muc5 <- inner_join(clin_mort_visual_haa,muc5b_data)
-final_data <- left_join(parenchyma,clin_mort_visual_haa_muc5) %>% drop_na(ila_visual,haa_pct)
+final_data <- left_join(parenchyma,clin_mort_visual_haa_muc5) %>% drop_na(ila_visual,haa_pct) 

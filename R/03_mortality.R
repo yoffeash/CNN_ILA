@@ -24,3 +24,4 @@ km_haa_plot <- ggsurvplot(km_haa_fit, data=final_data, risk.table=TRUE, pval = T
                           legend.labs=c("First","Second","Third","Fourth"), legend.title = "Quartile", legend = c(0.8,0.3),
                           title = "Survival by HAA Quartile")
 km_haa_plot 
+
